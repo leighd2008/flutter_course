@@ -15,8 +15,8 @@ class ConnectedProductsModel extends Model {
 
   Future<Null> addProduct(
       String title, String description, String image, double price) {
-        _isLoading = true;
-        notifyListeners(); 
+    _isLoading = true;
+    notifyListeners();
     final Map<String, dynamic> productData = {
       'title': title,
       'description': description,
@@ -41,7 +41,7 @@ class ConnectedProductsModel extends Model {
           userId: _authenticatedUser.id);
       _products.add(newProduct);
       _isLoading = false;
-      notifyListeners(); 
+      notifyListeners();
     });
   }
 }
@@ -75,17 +75,36 @@ class ProductsModel extends ConnectedProductsModel {
     return _showFavorites;
   }
 
-  void updateProduct(
+  Future<Null> updateProduct(
       String title, String description, String image, double price) {
-    final Product updatedProduct = Product(
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: selectedProduct.userEmail,
-        userId: selectedProduct.userId);
-    _products[selectedProductIndex] = updatedProduct;
-    notifyListeners(); //to enable immediate change on view
+    _isLoading = true;
+    notifyListeners();
+    final Map<String, dynamic> updateData = {
+      'title': title,
+      'description': description,
+      'image':
+          'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
+      'price': price,
+      'userEmail': selectedProduct.userEmail,
+      'userId': selectedProduct.userId
+    };
+    return http
+        .put(
+            'https://flutter-products-24a4c.firebaseio.com/products/${selectedProduct.id}.json',
+            body: json.encode(updateData))
+        .then((http.Response response) {
+      _isLoading = false;
+      final Product updatedProduct = Product(
+          id: selectedProduct.id,
+          title: title,
+          description: description,
+          image: image,
+          price: price,
+          userEmail: selectedProduct.userEmail,
+          userId: selectedProduct.userId);
+      _products[selectedProductIndex] = updatedProduct;
+      notifyListeners(); //to enable immediate change on view
+    });
   }
 
   void deleteProduct() {
@@ -95,20 +114,18 @@ class ProductsModel extends ConnectedProductsModel {
 
   void fetchProducts() {
     _isLoading = true;
-    notifyListeners(); 
+    notifyListeners();
     http
         .get('https://flutter-products-24a4c.firebaseio.com/products.json')
         .then((http.Response response) {
       final List<Product> fetchedProductList = [];
-      final Map<String, dynamic> productListData =
-          json.decode(response.body);
+      final Map<String, dynamic> productListData = json.decode(response.body);
       if (productListData == null) {
         _isLoading = false;
         notifyListeners();
         return;
       }
-      productListData
-          .forEach((String productId, dynamic productData) {
+      productListData.forEach((String productId, dynamic productData) {
         final Product product = Product(
             id: productId,
             title: productData['title'],
