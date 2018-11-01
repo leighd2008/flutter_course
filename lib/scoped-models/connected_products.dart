@@ -11,24 +11,27 @@ class ConnectedProductsModel extends Model {
   int _selProductIndex;
   User _authenticatedUser;
 
-  void addProduct(
-      String title, String description, String image, double price) {
-        final Map<String, dynamic> productData = {
-          'title': title,
-          'description': description,
-          'image': 'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
-          'price': price,
-        };
-        http.post('https://flutter-products-24a4c.firebaseio.com/products.json', body: json.encode(productData));
-    final Product newProduct = Product(
-        title: title,
-        description: description,
-        image: image,
-        price: price,
-        userEmail: _authenticatedUser.email,
-        userId: _authenticatedUser.id);
-    _products.add(newProduct);
-    notifyListeners(); //to enable immediate change on view
+  void addProduct(String title, String description, String image, double price) {
+    final Map<String, dynamic> productData = {
+      'title': title,
+      'description': description,
+      'image': 'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
+      'price': price,
+    };
+    http.post('https://flutter-products-24a4c.firebaseio.com/products.json', body: json.encode(productData)).then((http.Response response) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
+          print(responseData);
+        //   final Product newProduct = Product(
+        //     id: responseData.,
+        //     title: title,
+        //     description: description,
+        //     image: image,
+        //     price: price,
+        //     userEmail: _authenticatedUser.email,
+        //     userId: _authenticatedUser.id);
+        // _products.add(newProduct);
+        // notifyListeners(); //to enable immediate change on view
+        });
   }
 }
 
