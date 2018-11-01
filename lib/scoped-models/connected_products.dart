@@ -20,17 +20,16 @@ class ConnectedProductsModel extends Model {
     };
     http.post('https://flutter-products-24a4c.firebaseio.com/products.json', body: json.encode(productData)).then((http.Response response) {
           final Map<String, dynamic> responseData = json.decode(response.body);
-          print(responseData);
-        //   final Product newProduct = Product(
-        //     id: responseData.,
-        //     title: title,
-        //     description: description,
-        //     image: image,
-        //     price: price,
-        //     userEmail: _authenticatedUser.email,
-        //     userId: _authenticatedUser.id);
-        // _products.add(newProduct);
-        // notifyListeners(); //to enable immediate change on view
+          final Product newProduct = Product(
+            id: responseData['name'],
+            title: title,
+            description: description,
+            image: image,
+            price: price,
+            userEmail: _authenticatedUser.email,
+            userId: _authenticatedUser.id);
+        _products.add(newProduct);
+        notifyListeners(); //to enable immediate change on view
         });
   }
 }
@@ -79,6 +78,13 @@ class ProductsModel extends ConnectedProductsModel {
   void deleteProduct() {
     _products.removeAt(selectedProductIndex);
     notifyListeners(); //to enable immediate change on view
+  }
+
+  void fetchProducts() {
+     http.get('https://flutter-products-24a4c.firebaseio.com/products.json')
+      .then((http.Response response) {
+        print(json.decode(response.body));
+     });
   }
 
   void toggleProductFavoriteStatus() {
