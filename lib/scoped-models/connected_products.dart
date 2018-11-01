@@ -108,8 +108,18 @@ class ProductsModel extends ConnectedProductsModel {
   }
 
   void deleteProduct() {
+    _isLoading = true;
+    final deletedProductId = selectedProduct.id;
     _products.removeAt(selectedProductIndex);
-    notifyListeners(); //to enable immediate change on view
+    _selProductIndex = null;
+    notifyListeners();
+    http
+        .delete(
+            'https://flutter-products-24a4c.firebaseio.com/products/${deletedProductId}.json')
+        .then((http.Response respoonse) {
+      _isLoading = false;
+      notifyListeners();
+    });
   }
 
   void fetchProducts() {
