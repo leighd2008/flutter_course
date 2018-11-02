@@ -67,7 +67,7 @@ class ProductsModel extends ConnectedProductsModel {
     };
     try {
       final http.Response response = await http.post(
-          'https://flutter-products-24a4c.firebaseio.com/products.json',
+          'https://flutter-products-24a4c.firebaseio.com/products.json?auth=${_authenticatedUser.token}',
           body: json.encode(productData));
       if (response.statusCode != 200 && response.statusCode != 201) {
         _isLoading = false;
@@ -114,7 +114,7 @@ class ProductsModel extends ConnectedProductsModel {
     };
     return http
         .put(
-            'https://flutter-products-24a4c.firebaseio.com/products/${selectedProduct.id}.json',
+            'https://flutter-products-24a4c.firebaseio.com/products/${selectedProduct.id}.json?auth=${_authenticatedUser.token}',
             body: json.encode(updateData))
         .then((http.Response response) {
       _isLoading = false;
@@ -144,7 +144,7 @@ class ProductsModel extends ConnectedProductsModel {
     notifyListeners();
     return http
         .delete(
-            'https://flutter-products-24a4c.firebaseio.com/products/${deletedProductId}.json')
+            'https://flutter-products-24a4c.firebaseio.com/products/${deletedProductId}.json?auth=${_authenticatedUser.token}')
         .then((http.Response respoonse) {
       _isLoading = false;
       notifyListeners();
@@ -160,7 +160,8 @@ class ProductsModel extends ConnectedProductsModel {
     _isLoading = true;
     notifyListeners();
     return http
-        .get('https://flutter-products-24a4c.firebaseio.com/products.json')
+        .get(
+            'https://flutter-products-24a4c.firebaseio.com/products.json?auth=${_authenticatedUser.token}')
         .then<Null>((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
@@ -231,22 +232,27 @@ class UserModel extends ConnectedProductsModel {
     http.Response response;
     if (mode == AuthMode.Login) {
       response = await http.post(
-        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAf5FPWi1oe51VpWqt_NILTdLUivVWGTvc',
+          'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAf5FPWi1oe51VpWqt_NILTdLUivVWGTvc',
           body: json.encode(authData),
           headers: {'Content-Type': 'application/json'});
     } else {
       response = await http.post(
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAf5FPWi1oe51VpWqt_NILTdLUivVWGTvc',
-      body: json.encode(authData),
-      headers: {'Content-Type': 'application/json'},
-    );
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAf5FPWi1oe51VpWqt_NILTdLUivVWGTvc',
+        body: json.encode(authData),
+        headers: {'Content-Type': 'application/json'},
+      );
     }
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool hasError = true;
     String message = 'Something went wrong.';
+    print(responseData);
     if (responseData.containsKey('idToken')) {
       hasError = false;
       message = 'Authentication succeeded!';
+      _authenticatedUser = User(
+          id: responseData['localId'],
+          email: email,
+          token: responseData['idToken']);
     } else if (responseData['error']['message'] == 'EMAIL_EXISTS') {
       message = 'This email already exists.';
     } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
