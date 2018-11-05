@@ -9,6 +9,7 @@ import 'package:rxdart/subjects.dart';
 import '../models/product.dart';
 import '../models/user.dart';
 import '../models/auth.dart';
+import '../models/location_data.dart';
 
 class ConnectedProductsModel extends Model {
   List<Product> _products = [];
@@ -55,7 +56,7 @@ class ProductsModel extends ConnectedProductsModel {
   }
 
   Future<bool> addProduct(
-      String title, String description, String image, double price) async {
+      String title, String description, String image, double price, LocationData locData) async {
     _isLoading = true;
     notifyListeners();
     final Map<String, dynamic> productData = {
@@ -65,7 +66,10 @@ class ProductsModel extends ConnectedProductsModel {
           'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
       'price': price,
       'userEmail': _authenticatedUser.email,
-      'userId': _authenticatedUser.id
+      'userId': _authenticatedUser.id,
+      'loc_lat': locData.latitude,
+      'loc_lng': locData.longitude,
+      'loc_address': locData.address
     };
     try {
       final http.Response response = await http.post(
