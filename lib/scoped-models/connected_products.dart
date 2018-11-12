@@ -116,6 +116,9 @@ mixin ProductsModel on ConnectedProductsModel {
       'image':
           'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
       'price': price,
+      'loc_lat': locData.latitude,
+      'loc_lng': locData.longitude,
+      'loc_address': locData.address,
       'userEmail': selectedProduct.userEmail,
       'userId': selectedProduct.userId
     };
