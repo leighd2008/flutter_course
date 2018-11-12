@@ -30,7 +30,7 @@ class _LocationInputState extends State<LocationInput> {
   void initState() {
     _addressInputFocusNode.addListener(_updateLocation);
     if (widget.product != null) {
-      getStaticMap(widget.product.location.address);
+      getStaticMap(widget.product.location.address, false);
     }
     super.initState();
   }
@@ -41,7 +41,7 @@ class _LocationInputState extends State<LocationInput> {
     super.dispose();
   }
 
-  void getStaticMap(String address, [geocode = false]) async {
+  void getStaticMap(String address, [geocode = true]) async {
     if (address.isEmpty) {
       setState(() {
         _staticMapUri = null;
@@ -49,19 +49,24 @@ class _LocationInputState extends State<LocationInput> {
       widget.setLocation(null);
       return;
     }
-    final Uri uri = Uri.https(
-      'maps.googleapis.com',
-      '/maps/api/geocode/json',
-      {'address': address, 'key': 'AIzaSyBA21gt8280wGmBBNlK5SHKKGmefDk5mkE'},
-    );
-    final http.Response response = await http.get(uri);
-    final decodedResponse = json.decode(response.body);
-    final formattedAddress = decodedResponse['results'][0]['formatted_address'];
-    final coords = decodedResponse['results'][0]['geometry']['location'];
-    _locationData = LocationData(
-        address: formattedAddress,
-        latitude: coords['lat'],
-        longitude: coords['lng']);
+    if (geocode) {
+      final Uri uri = Uri.https(
+        'maps.googleapis.com',
+        '/maps/api/geocode/json',
+        {'address': address, 'key': 'AIzaSyBA21gt8280wGmBBNlK5SHKKGmefDk5mkE'},
+      );
+      final http.Response response = await http.get(uri);
+      final decodedResponse = json.decode(response.body);
+      final formattedAddress =
+          decodedResponse['results'][0]['formatted_address'];
+      final coords = decodedResponse['results'][0]['geometry']['location'];
+      _locationData = LocationData(
+          address: formattedAddress,
+          latitude: coords['lat'],
+          longitude: coords['lng']);
+    } else {
+      _locationData = widget.product.location;
+    }
 
     final StaticMapProvider staticMapViewProvider =
         StaticMapProvider('AIzaSyBA21gt8280wGmBBNlK5SHKKGmefDk5mkE');
@@ -105,7 +110,9 @@ class _LocationInputState extends State<LocationInput> {
         ),
         // ),
         SizedBox(height: 10.0),
-        Image.network(_staticMapUri.toString())
+        _staticMapUri == null
+            ? Container()
+            : Image.network(_staticMapUri.toString())
       ],
     );
   }
