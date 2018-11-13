@@ -8,6 +8,36 @@ class ImageInput extends StatefulWidget {
 }
 
 class _ImageInputState extends State<ImageInput> {
+  void _openImagePicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 150.0,
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Text('Pick an Image', style: TextStyle(fontWeight: FontWeight.bold),),
+              SizedBox(
+                height: 10.0,
+              ),
+              FlatButton(
+                textColor: Theme.of(context).primaryColor,
+                child: Text('Use Camera'),
+                onPressed: () {},
+              ),
+              FlatButton(
+                textColor: Theme.of(context).primaryColor,
+                child: Text('Use Gallery'),
+                onPressed: () {},
+              ),
+            ],
+          )
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final buttonColor = Theme.of(context).primaryColor;
@@ -18,7 +48,9 @@ class _ImageInputState extends State<ImageInput> {
             color: buttonColor,
             width: 2.0,
           ),
-          onPressed: () {},
+          onPressed: () {
+            _openImagePicker(context);
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
