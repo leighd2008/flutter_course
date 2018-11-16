@@ -58,7 +58,7 @@ mixin ProductsModel on ConnectedProductsModel {
     return _showFavorites;
   }
 
-  Future<Map<String, String>> uploadImage(File image, {String imagePath}) async {
+  Future<Map<String, dynamic>> uploadImage(File image, {String imagePath}) async {
     final mimeTypeData = lookupMimeType(image.path).split('/');
     final imageUploadRequest = http.MultipartRequest('POST', Uri.parse('https://us-central1-flutter-products-24a4c.cloudfunctions.net/storeImage'));
     final file = await http.MultipartFile.fromPath(
