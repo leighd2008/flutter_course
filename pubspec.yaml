@@ -25,6 +25,7 @@ dependencies:
   rxdart: ^0.19.0
   location: ^1.4.1
   image_picker: ^0.4.10
+  mime: ^0.9.6+2
   map_view: 
   git:
 url: git://github.com/Eimji/flutter_google_map_view.git
