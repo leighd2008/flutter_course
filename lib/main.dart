@@ -1,4 +1,4 @@
-//finished lecture 246
+//finished lecture 250
 import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
