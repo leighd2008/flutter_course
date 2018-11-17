@@ -157,8 +157,8 @@ mixin ProductsModel on ConnectedProductsModel {
     final Map<String, dynamic> updateData = {
       'title': title,
       'description': description,
-      'image':
-          'https://cdn.pixabay.com/photo/2015/10/02/12/00/chocolate-968457_960_720.jpg',
+      'imageUrl': ,
+      'imagePath': ,
       'price': price,
       'loc_lat': locData.latitude,
       'loc_lng': locData.longitude,

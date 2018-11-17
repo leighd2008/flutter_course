@@ -71,7 +71,8 @@ class _ProductEditPageState extends State<ProductEditPage> {
   Widget _buildDescriptionTextField(Product product) {
     if (product == null && _descriptionTextController.text.trim() == '') {
       _descriptionTextController.text = '';
-    } else if (product != null && _descriptionTextController.text.trim() == '') {
+    } else if (product != null &&
+        _descriptionTextController.text.trim() == '') {
       _descriptionTextController.text = product.description;
     }
 
@@ -103,7 +104,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
       _priceTextController.text = '';
     } else if (product != null && _priceTextController.text.trim() == '') {
       _priceTextController.text = product.price.toString();
-    } 
+    }
 
     return
         // EnsureVisibleWhenFocused(
@@ -203,18 +204,19 @@ class _ProductEditPageState extends State<ProductEditPage> {
   void _submitForm(
       Function addProduct, Function updateProduct, Function setSelectedProduct,
       [int selectedProductIndex]) {
-    if (!_formKey.currentState.validate() || (_formData['image'] == null && selectedProductIndex == -1)) {
+    if (!_formKey.currentState.validate() ||
+        (_formData['image'] == null && selectedProductIndex == -1)) {
       return;
     }
     _formKey.currentState.save();
     if (selectedProductIndex == -1) {
       addProduct(
-        _titleTextController.text,
-        _descriptionTextController.text,
-        _formData['image'],
-        double.parse(_priceTextController.text),
-        _formData['location']
-      ).then((bool success) {
+              _titleTextController.text,
+              _descriptionTextController.text,
+              _formData['image'],
+              double.parse(_priceTextController.text),
+              _formData['location'])
+          .then((bool success) {
         if (success) {
           Navigator.pushReplacementNamed(context, '/products')
               .then((_) => setSelectedProduct(null));
