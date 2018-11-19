@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -87,16 +89,30 @@ class _ProductFABState extends State<ProductFAB> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            FloatingActionButton(
-              heroTag: 'options',
-              onPressed: () {
-                if (_controller.isDismissed) {
-                  _controller.forward();
-                } else {
-                  _controller.reverse();
-                }
-              },
-              child: Icon(Icons.more_vert),
+            Container(
+              height: 70.0,
+              width: 56.0,
+              child: FloatingActionButton(
+                heroTag: 'options',
+                onPressed: () {
+                  if (_controller.isDismissed) {
+                    _controller.forward();
+                  } else {
+                    _controller.reverse();
+                  }
+                },
+                child: AnimatedBuilder(
+                  animation: _controller,
+                  builder: (BuildContext context, Widget child) {
+                    return Transform(
+                      alignment: FractionalOffset.center,
+                      transform:
+                          Matrix4.rotationZ(_controller.value * 0.5 * math.pi),
+                      child: Icon(_controller.isDismissed ? Icons.more_vert : Icons.close),
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         );
