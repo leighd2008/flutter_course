@@ -8,6 +8,7 @@ import 'package:scoped_model/scoped_model.dart';
 // import '../widgets/helpers/ensure-visible.dart';
 import '../widgets/form_inputs/location.dart';
 import '../models/product.dart';
+import '../widgets/ui_elements/adaptive_progress_indicator.dart';
 import '../scoped-models/main.dart';
 import '../models/location_data.dart';
 import '../widgets/form_inputs/image.dart';
@@ -133,9 +134,7 @@ class _ProductEditPageState extends State<ProductEditPage> {
       builder: (BuildContext context, Widget child, MainModel model) {
         return model.isLoading
             ? Center(
-                child: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoActivityIndicator()
-                    : CircularProgressIndicator(),
+                child: AdaptiveProgressIndicator(),
               )
             : RaisedButton(
                 child: Text('Save'),
