@@ -79,14 +79,14 @@ mixin ProductsModel on ConnectedProductsModel {
       final streamedResponse = await imageUploadRequest.send();
       final response = await http.Response.fromStream(streamedResponse);
       if (response.statusCode != 200 && response.statusCode != 201) {
-        print('Something went wrong');
-        print(json.decode(response.body));
+        // print('Something went wrong');
+        // print(json.decode(response.body));
         return null;
       }
       final responseData = json.decode(response.body);
       return responseData;
     } catch (error) {
-      print(error);
+      // print(error);
       return null;
     }
   }
@@ -98,7 +98,7 @@ mixin ProductsModel on ConnectedProductsModel {
     final uploadData = await uploadImage(image);
 
     if (uploadData == null) {
-      print('Upload failed');
+      // print('Upload failed');
       return false;
     }
 
@@ -160,7 +160,7 @@ mixin ProductsModel on ConnectedProductsModel {
       final uploadData = await uploadImage(image);
 
     if (uploadData == null) {
-      print('Upload failed');
+      // print('Upload failed');
       return false;
     }
 
@@ -371,7 +371,7 @@ mixin UserModel on ConnectedProductsModel {
     final Map<String, dynamic> responseData = json.decode(response.body);
     bool hasError = true;
     String message = 'Something went wrong.';
-    print(responseData);
+    // print(responseData);
     if (responseData.containsKey('idToken')) {
       hasError = false;
       message = 'Authentication succeeded!';

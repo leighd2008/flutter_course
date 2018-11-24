@@ -54,9 +54,9 @@ class _ProductsListPage extends State<ProductListPage> {
                   model.selectProduct(model.allProducts[index].id);
                   model.deleteProduct();
                 } else if (direction == DismissDirection.startToEnd) {
-                  print('Swiped start to end');
+                  // print('Swiped start to end');
                 } else {
-                  print('Other swiping');
+                  // print('Other swiping');
                 }
               },
               background: Container(color: Colors.red),

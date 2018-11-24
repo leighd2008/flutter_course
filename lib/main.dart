@@ -1,4 +1,4 @@
-//finished lecture 281
+//finished lecture 295
 import 'package:flutter/material.dart';
 
 import 'package:scoped_model/scoped_model.dart';
@@ -47,10 +47,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('building main page');
+    // print('building main page');
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
+        title: 'EasyList',
         // debugShowMaterialGrid: true,
         theme: getAdaptiveThemeData(context),
         // home: AuthPage(),
