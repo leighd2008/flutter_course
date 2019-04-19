@@ -151,7 +151,7 @@ mixin ProductsModel on ConnectedProductsModel {
   }
 
   Future<bool> updateProduct(
-      String title, String description, File image, double price LocationData locData) async {
+      String title, String description, File image, double price, LocationData locData) async {
     _isLoading = true;
     String imageUrl = selectedProduct.image;
     String imagePath = selectedProduct.imagePath;

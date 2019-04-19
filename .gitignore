@@ -9,3 +9,5 @@ build/
 .flutter-plugins
 
 node_modules
+
+key.properties
